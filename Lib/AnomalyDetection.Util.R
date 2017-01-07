@@ -11,6 +11,24 @@ library(reshape2);
 #
 #
 #
+# import tibble.Util.R
+myLibrary <- "Lib/tibble.Util.R";
+write(paste0(c("Load Util........\t", myLibrary), sep = "", collapse = ""), stdout());
+source(myLibrary);
+rm(myLibrary);
+# import ggplot2.Util.R
+myLibrary <- "Lib/ggplot2.Util.R";
+write(paste0(c("Load Util........\t", myLibrary), sep = "", collapse = ""), stdout());
+source(myLibrary);
+rm(myLibrary);
+# import reshape2.Util.R
+myLibrary <- "Lib/reshape2.Util.R";
+write(paste0(c("Load Util........\t", myLibrary), sep = "", collapse = ""), stdout());
+source(myLibrary);
+rm(myLibrary);
+#
+#
+#
 ScreenListToTibble <- function(anyList = list(),
                        multiNameList = c("", ""),
                        singleNameList = NULL){
@@ -32,105 +50,7 @@ ScreenListToTibble <- function(anyList = list(),
   return(anyList);
 }
 #
-#
-#
-ScreenMatrix <- function(anyMatrix = matrix(NULL),
-                           anyName = "",
-                           multiNameList = NULL,
-                           singleNameList = NULL){
-  print(paste0("screen.........", anyName));
-  aTibble <- NULL;
-  nbCol <- ncol(anyMatrix);
-  nbName <- length(multiNameList);
-  
-  if(nbCol >= 2){
-    aTibble <- tibble::as_data_frame(as.data.frame(anyMatrix));
-  }else{
-    aTibble <- anyMatrix;
-    colnames(aTibble) <- singleNameList;
-  }
-  
-  if(nbCol == nbName){
-    colnames(aTibble) <- multiNameList;
-  }
-  
-  return(aTibble);
-}
-#
-#
-#
-DescribeList <- function(anyList = list()){
-  
-  plotList <- anyList;
-  
-  for (nameElement in names(anyList)) {
-    listElement <- anyList[[nameElement]];
-    cat("@", nameElement, "\t", class(listElement), "\t", typeof(listElement), "\n");
-    print(head(listElement, 1));
-    aTitle <- paste0("GGPlot for ", nameElement);
-    nbCol <- ncol(listElement);
-    
-    if(nbCol <= 2){
-      if(is.data.frame(listElement)){
-        plotList[[nameElement]] <- ggplot(data = listElement, aes(`Latency (ms)`, `Throughput (mb/s)`)) +
-          ggtitle(aTitle) +
-          geom_point(color = "skyblue");
-      }else{ #barplot(listElement);
-        plotList[[nameElement]] <- ggplot(as.data.frame(listElement), aes(x=NoName)) +
-          ggtitle(aTitle) +
-          geom_histogram(binwidth = 1);
-      }
-    }
-  }
-  
-  return(plotList);
-}
-#
-#
-#
-MeltReshape <- function(anyList = list()){
-  
-  meltList <- anyList;
-  
-  for (nameElement in names(anyList)) {
-    listElement <- anyList[[nameElement]];
-    cat("@", nameElement, "\t", class(listElement), "\t", typeof(listElement), "\n");
-    print(head(listElement, 1));
-    
-    if(is.data.frame(listElement)){
-      meltList[[nameElement]] <- tibble::as_data_frame(reshape2::melt(listElement));
-    }else{
-      meltList[[nameElement]] <- NULL;
-    }
-  }
-  
-  return(meltList);
-}
-#
-#
-#
-DescribeMeltList <- function(anyList = list()){
-  
-  plotList <- anyList;
-  
-  for (nameElement in names(anyList)) {
-    listElement <- anyList[[nameElement]];
-    cat("@", nameElement, "\t", class(listElement), "\t", typeof(listElement), "\n");
-    print(head(listElement, 1));
-    
-    if(is.data.frame(listElement)){
-      plotList[[nameElement]] <- ggplot(data = listElement, aes(x = value, fill = variable, color = variable)) +
-        geom_density(alpha = 0.3) +
-        ggtitle(paste0("Distibution of ", nameElement));
-    }else{
-      plotList[[nameElement]] <- NULL;
-    }
-  }
-  
-  return(plotList);
-}
-#
-#
+###
 #
 CaretPreprocessList <- function(anyList = list()){
   
@@ -383,3 +303,4 @@ DescribeOutlierList <- function(anyList = list()){
   
   return(plotList);
 }
+

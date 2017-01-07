@@ -1,28 +1,5 @@
-# env var
-gDriveHome <- gsub("\\\\", "/", Sys.getenv("GDrive"));
-write(paste0(c("Environment.....\t", gDriveHome), sep = "", collapse = ""), stdout());
-# shared folder
-gDriveFolder <- "MiApp";
-write(paste0(c("Folder..........\t", gDriveFolder), sep = "", collapse = ""), stdout());
-# solution
-gDriveSolution <- "Anomaly_Detection_with_R";
-write(paste0(c("Solution........\t", gDriveSolution), sep = "", collapse = ""), stdout());
-# project
-gDriveProject <- "";
-write(paste0(c("Project.........\t", gDriveProject), sep = "", collapse = ""), stdout());
-# namespace
-gDriveNamespace <- paste0(c(gDriveSolution, gDriveProject), sep = "", collapse = ".");
-write(paste0(c("Namespace.......\t", gDriveNamespace), sep = "", collapse = ""), stdout());
-# common
-gDriveCommon <- "RCommon";
-write(paste0(c("Common..........\t", gDriveCommon), sep = "", collapse = ""), stdout());
-# path
-gDriveList <- c(gDriveHome, gDriveFolder, gDriveSolution, gDriveProject); #, "Data");
-#, gDriveSpace);
-gDrivePath <- paste0(gDriveList, sep = "/", collapse = "");
-write(paste0(c("Path old........\t", getwd()), sep = "", collapse = ""), stderr());
-write(paste0(c("Path new........\t", gDrivePath), sep = "", collapse = ""), stdout());
-setwd(gDrivePath);
+# load Util
+source(paste0("Lib/", projectName, ".Util.R"));
 ###name
 twoNameList <- c("Latency (ms)", "Throughput (mb/s)");
 oneNameList <- c("NoName");
@@ -33,6 +10,7 @@ rm(data1);
 # screen a list
 aList <- ScreenListToTibble(anyList = aList, twoNameList, oneNameList);
 DescribeList(aList);
+break;
 meltList <- MeltReshape(aList);
 DescribeMeltList(meltList);
 preProcessList <- CaretPreprocessList(aList);
