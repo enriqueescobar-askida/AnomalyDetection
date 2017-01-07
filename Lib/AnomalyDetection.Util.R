@@ -26,6 +26,11 @@ myLibrary <- "Lib/reshape2.Util.R";
 write(paste0(c("Load Util........\t", myLibrary), sep = "", collapse = ""), stdout());
 source(myLibrary);
 rm(myLibrary);
+# import caret.Util.R
+myLibrary <- "Lib/caret.Util.R";
+write(paste0(c("Load Util........\t", myLibrary), sep = "", collapse = ""), stdout());
+source(myLibrary);
+rm(myLibrary);
 #
 #
 #
@@ -50,27 +55,6 @@ ScreenListToTibble <- function(anyList = list(),
   return(anyList);
 }
 #
-###
-#
-CaretPreprocessList <- function(anyList = list()){
-  
-  caretList <- anyList;
-  
-  for (nameElement in names(anyList)) {
-    listElement <- anyList[[nameElement]];
-    cat("@", nameElement, "\t", class(listElement), "\t", typeof(listElement), "\n");
-    print(head(listElement, 1));
-    
-    if(is.data.frame(listElement)){
-      caretList[[nameElement]] <- caret::preProcess(listElement, method = "center");
-    }else{
-      caretList[[nameElement]] <- NULL;
-    }
-  }
-  
-  return(caretList);
-}
-#
 #
 #
 PredictPreprocessList <- function(preProcessList = list(), aList = list()){
@@ -89,7 +73,7 @@ PredictPreprocessList <- function(preProcessList = list(), aList = list()){
   return(centerList);
 }
 #
-#
+###
 #
 CenteredToProbabilityList <- function(centeredList = list()){
   
@@ -112,103 +96,6 @@ CenteredToProbabilityList <- function(centeredList = list()){
   }
   
   return(probaList);
-}
-#
-#
-#
-ProbabilityListToDensityPlot <- function(probabilityList = list()){
-  
-  plotList <- probabilityList;
-  
-  for (nameElement in names(probabilityList)) {
-    listElement <- probabilityList[[nameElement]];
-    cat("@", nameElement, "\t", class(listElement), "\t", typeof(listElement), "\n");
-    print(head(listElement, 1));
-    
-    if(is.data.frame(listElement)){
-      plotList[[nameElement]] <- ggplot(data = listElement, aes(x = Probability)) +
-        geom_density(fill = "skyblue") +
-        ggtitle(paste0("Distibution of calculated probabilities of ", nameElement));
-    }else{
-      plotList[[nameElement]] <- NULL;
-    }
-  }
-  
-  return(plotList);
-}
-#
-#
-#
-ProbabilityListToBoxPlot <- function(probabilityList = list()){
-  
-  plotList <- probabilityList;
-  
-  for (nameElement in names(probabilityList)) {
-    listElement <- probabilityList[[nameElement]];
-    cat("@", nameElement, "\t", class(listElement), "\t", typeof(listElement), "\n");
-    print(head(listElement, 1));
-    
-    if(is.data.frame(listElement)){
-      plotList[[nameElement]] <- ggplot(data = listElement, aes(y = Probability, x = 1)) +
-        geom_boxplot(fill = "skyblue", colour = "steelblue4") +
-        geom_jitter(colour = "grey50") +
-        xlab('') +
-        ggtitle(paste0("Box plot of calculated probabilities of ", nameElement));
-    }else{
-      plotList[[nameElement]] <- NULL;
-    }
-  }
-  
-  return(plotList);
-}
-#
-#
-#
-ProbabilityListBind <- function(anyList = list(), probabilityList = list()){
-  
-  for (nameElement in names(probabilityList)) {
-    listElement <- probabilityList[[nameElement]];
-    cat("@", nameElement, "\t", class(listElement), "\t", typeof(listElement), "\n");
-    print(head(listElement, 1));
-    anyElement <- anyList[[nameElement]];
-    
-    if(is.data.frame(listElement)){
-      anyElement <- cbind(anyElement, listElement);
-    }else{
-      anyElement <- cbind(anyElement, data.frame(NULL));
-    }
-    
-    anyList[[nameElement]] <- tibble::as_data_frame(anyElement);
-  }
-  
-  return(anyList);
-}
-#
-#
-#
-DescribeListAndProbability <- function(anyList = list()){
-  
-  plotList <- anyList;
-  
-  for (nameElement in names(anyList)) {
-    listElement <- anyList[[nameElement]];
-    cat("@", nameElement, "\t", class(listElement), "\t", typeof(listElement), "\n");
-    print(head(listElement, 1));
-    aTitle <- paste0("GGPlot Probability distribution for ", nameElement);
-    
-    if(is.data.frame(listElement)){
-      plotList[[nameElement]] <- ggplot(data = listElement, aes(x = `Latency (ms)`, y = `Throughput (mb/s)`, z = `Probability`)) +
-        ggtitle(aTitle) +
-        geom_point(size=2, colour="skyblue")+
-        stat_density2d(color = "red");
-    }#else{
-    #  plotList[[nameElement]] <- ggplot(as.data.frame(listElement), aes(x=NoName)) +
-    #    ggtitle(aTitle) +
-    #    geom_histogram(binwidth = 1);
-    #}
-  }
-  
-  return(plotList);
 }
 #
 #
@@ -279,28 +166,5 @@ ProbabilityListToOutliers <- function(aList = list(), frequencyMatrix = matrix(n
   }
   
   return(aList);
-}
-#
-#
-#
-DescribeOutlierList <- function(anyList = list()){
-  
-  plotList <- anyList;
-  
-  for (nameElement in names(anyList)) {
-    listElement <- anyList[[nameElement]];
-    cat("@", nameElement, "\t", class(listElement), "\t", typeof(listElement), "\n");
-    print(head(listElement, 1));
-    
-    if(is.data.frame(listElement)){
-      plotList[[nameElement]] <- ggplot(data = listElement, aes(x = `Latency (ms)`, y = `Throughput (mb/s)`)) +
-                                  geom_point(aes(color = Outliers)) +
-                                  ggtitle(paste0("Anomaly Detection of ", nameElement));
-    }else{
-      plotList[[nameElement]] <- NULL;
-    }
-  }
-  
-  return(plotList);
 }
 

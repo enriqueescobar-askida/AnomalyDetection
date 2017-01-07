@@ -1,20 +1,20 @@
-# for data manipulation
-require(reshape2);
+# to center our data by subtracting its mean
+require(caret);
 #
 #
 #
 
-#' Title  MeltReshape()
+#' Title  CaretPreprocessList
 #'
 #' @param anyList 
 #'
-#' @return list of data.frame
+#' @return list
 #' @export TBD
 #'
 #' @examples TBD
-MeltReshape <- function(anyList = list()){
+CaretPreprocessList <- function(anyList = list()){
   
-  meltList <- anyList;
+  caretList <- anyList;
   
   for (nameElement in names(anyList)) {
     listElement <- anyList[[nameElement]];
@@ -22,12 +22,11 @@ MeltReshape <- function(anyList = list()){
     print(head(listElement, 1));
     
     if(is.data.frame(listElement)){
-      meltList[[nameElement]] <- as.data.frame(reshape2::melt(listElement));
+      caretList[[nameElement]] <- caret::preProcess(listElement, method = "center");
     }else{
-      meltList[[nameElement]] <- NULL;
+      caretList[[nameElement]] <- NULL;
     }
   }
   
-  return(meltList);
+  return(caretList);
 }
-

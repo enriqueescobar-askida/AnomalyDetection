@@ -29,5 +29,7 @@ setwd(projectPath);
 rm(localRepository);
 # options
 options(scipen = 100);
+# session info
+sessionInfo();
 # load project
 source(paste0(projectName, ".R"));

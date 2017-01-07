@@ -1,3 +1,4 @@
+# for data frame manipulation
 require(tibble);
 #
 #
@@ -37,3 +38,31 @@ ScreenMatrix <- function(anyMatrix = matrix(NULL),
   return(aTibble);
 }
 
+#' Title ProbabilityListBind
+#'
+#' @param anyList 
+#' @param probabilityList 
+#'
+#' @return tibble list
+#' @export
+#'
+#' @examples
+ProbabilityListBind <- function(anyList = list(), probabilityList = list()){
+  
+  for (nameElement in names(probabilityList)) {
+    listElement <- probabilityList[[nameElement]];
+    cat("@", nameElement, "\t", class(listElement), "\t", typeof(listElement), "\n");
+    print(head(listElement, 1));
+    anyElement <- anyList[[nameElement]];
+    
+    if(is.data.frame(listElement)){
+      anyElement <- cbind(anyElement, listElement);
+    }else{
+      anyElement <- cbind(anyElement, data.frame(NULL));
+    }
+    
+    anyList[[nameElement]] <- tibble::as_data_frame(anyElement);
+  }
+  
+  return(anyList);
+}

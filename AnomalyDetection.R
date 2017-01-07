@@ -9,19 +9,19 @@ aList <- get(load("Data/data1.RData"));
 rm(data1);
 # screen a list
 aList <- ScreenListToTibble(anyList = aList, twoNameList, oneNameList);
-DescribeList(aList);
-break;
+aPlotList <- DescribePlotList(aList);
 meltList <- MeltReshape(aList);
-DescribeMeltList(meltList);
-preProcessList <- CaretPreprocessList(aList);
-centeredList <- PredictPreprocessList(preProcessList, aList);
+meltPlotList <- DescribeMeltPlotList(meltList);
+caretPreprocessList <- CaretPreprocessList(aList);
+centeredList <- PredictPreprocessList(caretPreprocessList, aList);
 probabilityList <- CenteredToProbabilityList(centeredList);
-ProbabilityListToDensityPlot(probabilityList);
-ProbabilityListToBoxPlot(probabilityList);
+probabilityDensityPlotList <- ProbabilityListToDensityPlot(probabilityList);
+probabilityBoxplotList <- ProbabilityListToBoxPlot(probabilityList);
 aList <- ProbabilityListBind(aList, probabilityList);
-DescribeListAndProbability(aList);
+aProbaPlotList <- DescribeAndProbabilityPlotList(aList);
 aList <- ProbabilityListToOutliers(aList, frequencyMatrix = aList$yval);
-DescribeOutlierList(aList);
+# error in AES() DescribeOutlierPlotList(aList);
+break;
 # All the variables below are matrices
 # X <- data1$X;
 # X <- tibble::as_data_frame(as.data.frame(X));
