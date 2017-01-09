@@ -1,5 +1,158 @@
 # load Util
 source(paste0("Lib/", projectName, ".Util.R"));
+#
+#
+#
+library(foreign);
+# ggplot2 contains a dataset called diamonds. Make this dataset available using the data() function.
+data(diamonds, package = "ggplot2");
+# Find out what kind of object it is.
+class(diamonds);
+typeof(diamonds);
+# Now investigate the structure of diamonds, a data frame with 53,940 observations
+str(diamonds);
+# Look at the dimension of the data frame.
+dim(diamonds);
+# names
+names(diamonds);
+# Create a random sample of the diamonds data.
+diamondSample <- diamonds[sample(nrow(diamonds), 5000),];
+dim(diamondSample);
+# In this sample you use ggplot2.
+TwoColumnDataFrameToPlot(diamondSample, 1, 7, "Diamond Sample");
+# Add a log scale.
+TwoColumnDataFrameToXLogPlot(diamondSample, 1, 7, "Diamond Sample");
+# Add a log scale for both scales.
+TwoColumnDataFrameToXYLogPlot(diamondSample, 1, 7, "Diamond Sample");
+### Linear Regression in R
+# Build the model. log of price explained by log of carat. This illustrates how linear regression works. Later we fit a model that includes the remaining variables
+model <- TwoColumnDataFrameToLinearModel(diamondSample, 1, 7);
+# Look at the results.
+summary(model);
+# R-squared = 0.9334, i.e. model explains 93.3% of variance
+# Extract model coefficients.
+stats::coefficients(model);
+stats::coefficients(model)[1];
+# exponentiate the log of price, to convert to original units
+exp(stats::coefficients(model)[1]);
+# Show the model in a plot.
+TwoColumnDataFrameToXYLogLmPlot(diamondSample, 1, 7, "Diamond Sample");
+### Regression Diagnostics 
+# It is easy to get regression diagnostic plots.
+# The same plot function that plots points either with a formula or
+# with the coordinates also has a "method" for dealing with a model object.
+# Look at some model diagnostics.
+# check to see Q-Q plot to see linearity which means residuals are normally distributed
+# Set up for multiple plots on the same figure.
+par(mfrow = c(2, 2));
+plot(model, col = "blue");
+# Rest plot layout to single plot on a 1x1 grid
+par(mfrow = c(1, 1));
+### The Model Object 
+# Finally, let's look at the model object. R packs everything that goes with the model, e.g. the formula and results into the object. You can pick out what you need by indexing into the model object.
+str(model);
+# note this is the same as coef(model)
+model$coefficients;
+# Now fit a new model including more columns
+# Model log of price against all columns
+model <- TwoColumnDataFramePlusToLinearModel(diamondSample, 1, 7);
+summary(model);
+# R-squared = 0.9824, i.e. model explains 98.2% of variance, i.e. a better model than previously
+# Create data frame of actual and predicted price
+diamondsActualVsPredicted <- data.frame(actual = diamonds$price
+                               # anti-log of predictions
+                               , predicted = exp(stats::predict(model, diamonds)));
+# Inspect predictions
+head(diamondsActualVsPredicted);
+# Create plot of actuals vs predictions
+ggplot2::ggplot(diamondsActualVsPredicted, aes(x = actual, y = predicted)) + 
+  geom_point(colour = "blue", alpha = 0.01) +
+  geom_smooth(colour = "red") +
+  coord_equal(ylim = c(0, 20000)) + # force equal scale
+  ggtitle("Linear model of diamonds data");
+## Introduction to the ggplot2 plotting package
+# The ggplot2 package is tremendously popular because it allows you to create
+# beautiful plots by describing the plot structure.
+# Install and load the packages.
+#options(warn = -1)
+suppressWarnings(
+  if (!require("ggplot2", quietly = TRUE))
+    install.packages("ggplot2", quiet = TRUE))
+# mapproj is required for map projections.
+suppressWarnings(
+  if (!require("mapproj", quietly = TRUE))
+    install.packages("mapproj", quiet = TRUE))
+#options(warn = 0)
+library("ggplot2", quietly = TRUE)
+library("mapproj", quietly = TRUE)
+# R has a number of built-in datasets.
+# In this example you use the dataset called quakes.
+# This data contains locations of earthquakes off Fiji.
+# Read the help page for more information.
+suppressWarnings(? quakes)
+# Inspect the structure of the data (a data frame with 5 columns).
+str(quakes)
+# Set the font size so that it will be clearly legible.
+ggplot2::theme_set(theme_gray(base_size = 18))
+# Plot longitude and latitude of quakes.
+# To create a plot, you have to specify the data, then map aesthetics to 
+# columns in your data. In this example, you map the column long to the x-axis
+# and lat to the y-axis.
+# Then you add a layer with points (geom_point) and a layer to plot maps.
+p0 <- ggplot2::ggplot(quakes, aes(x = long, y = lat)) +
+  geom_point() + 
+  coord_map()
+p0 
+# You can use a number of different aesthetics, for example colour or size
+# of the points.
+# Map the depth column to the colour aesthetic.
+p1 <- ggplot2::ggplot(quakes, aes(x = long, y = lat)) + 
+  geom_point(aes(colour = depth)) + 
+  coord_map()
+p1
+# Add size for magnitude. The bigger the magnitude, the larger the point.
+p2 <- ggplot2::ggplot(quakes, aes(x = long, y = lat)) + 
+  geom_point(aes(colour = depth, size = mag)) + 
+  coord_map()
+p2
+# You can control the transparancy of a plot object with the alpha aesthetic.
+# High values of alpha (close to 1) are opaque, while low values (close to 0)
+# are translucent.
+# Add alpha level to hide overplotting, thus revealing detail.
+p3 <- ggplot2::ggplot(quakes, aes(x = long, y = lat)) + 
+  geom_point(aes(colour = depth, size = mag), alpha = 0.25) + 
+  coord_map()
+p3
+# Change colour gradient by adding a gradient scale.
+p4 <- ggplot2::ggplot(quakes, aes(x = long, y = lat)) + 
+  geom_point(aes(colour = depth, size = mag), alpha = 0.25) + 
+  coord_map() +
+  scale_colour_gradient(low = "blue", high = "red")
+p4
+# Add a plot title.
+p5 <- ggplot2::ggplot(quakes, aes(x = long, y = lat)) + 
+  geom_point(aes(colour = depth, size = mag), alpha = 0.25) + 
+  scale_colour_gradient(low = "blue", high = "red") + 
+  ggtitle("Distribution of earthquakes near Fiji") +
+  coord_map()  
+p5
+# Now plot multiple plots on the same graphic.
+# The package "grid" is built into R and allows you to take control of the 
+# plotting area. A grob is the abbreviation for "graphical object", and the 
+# function ggplotGrob() in ggplot2 converts a ggplot2 object into a grob.
+# You can then use the grid functions to combine your ggplot objects.
+theme_set(theme_grey(12) + theme(legend.key.size  =  unit(0.5, "lines")))
+library(grid)
+plot.new()
+grid.draw(cbind(
+  ggplotGrob(p1), 
+  ggplotGrob(p2),
+  ggplotGrob(p3),
+  size = "last"
+))
+#
+#
+#
 ###name
 twoNameList <- c("Latency (ms)", "Throughput (mb/s)");
 oneNameList <- c("NoName");

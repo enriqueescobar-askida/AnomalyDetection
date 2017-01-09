@@ -3,6 +3,165 @@ require(ggplot2);
 #
 #
 #
+# Set the font size so that it will be clearly legible.
+ggplot2::theme_set(theme_gray(base_size = 18));
+
+#' Title  TwoColumnDataFrameToPlot
+#'
+#' @param aDataFrame 
+#' @param columnX 
+#' @param mainTitle 
+#'
+#' @return ggplot2
+#' @export TBD
+#'
+#' @examples TBD
+TwoColumnDataFrameToPlot <- function(aDataFrame = NULL
+                                     , columnX = -1
+                                     , columnY = -1
+                                     , mainTitle = ""){
+  
+  if (is.null(aDataFrame)) {
+    
+    return(NULL);
+  } else {
+    # titles
+    xTitle <- names(aDataFrame)[columnX];
+    yTitle <- names(aDataFrame)[columnY];
+    colnames(aDataFrame) <- NULL;
+    names(aDataFrame)[columnX] <- "X";
+    names(aDataFrame)[columnY] <- "Y";
+    # graph
+    aPlot <- ggplot(aDataFrame, aes(X, Y)) +
+      xlab(xTitle) +
+      ylab(yTitle) +
+      ggtitle(mainTitle) +
+      theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+      geom_point(colour = "blue");
+    
+    return(aPlot);
+  }
+}
+
+#' Title  TwoColumnDataFrameToXLogPlot
+#'
+#' @param aDataFrame 
+#' @param columnX 
+#' @param columnY 
+#' @param mainTitle 
+#'
+#' @return ggplot2
+#' @export TBD
+#'
+#' @examples TBD
+TwoColumnDataFrameToXLogPlot <- function(aDataFrame = NULL
+                                     , columnX = -1
+                                     , columnY = -1
+                                     , mainTitle = ""){
+  
+  if (is.null(aDataFrame)) {
+    
+    return(NULL);
+  } else {
+    # titles
+    xTitle <- names(aDataFrame)[columnX];
+    yTitle <- names(aDataFrame)[columnY];
+    colnames(aDataFrame) <- NULL;
+    names(aDataFrame)[columnX] <- "X";
+    names(aDataFrame)[columnY] <- "Y";
+    # graph
+    aPlot <- ggplot(aDataFrame, aes(X, Y)) +
+      xlab(xTitle) +
+      ylab(yTitle) +
+      ggtitle(mainTitle) +
+      theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+      geom_point(colour = "blue") +
+      scale_x_log10();
+    
+    return(aPlot);
+  }
+}
+
+#' Title  TwoColumnDataFrameToXYLogPlot
+#'
+#' @param aDataFrame 
+#' @param columnX 
+#' @param columnY 
+#' @param mainTitle 
+#'
+#' @return ggplot2
+#' @export TBD
+#'
+#' @examples TBD
+TwoColumnDataFrameToXYLogPlot <- function(aDataFrame = NULL
+                                         , columnX = -1
+                                         , columnY = -1
+                                         , mainTitle = ""){
+  
+  if (is.null(aDataFrame)) {
+    
+    return(NULL);
+  } else {
+    # titles
+    xTitle <- names(aDataFrame)[columnX];
+    yTitle <- names(aDataFrame)[columnY];
+    colnames(aDataFrame) <- NULL;
+    names(aDataFrame)[columnX] <- "X";
+    names(aDataFrame)[columnY] <- "Y";
+    # graph
+    aPlot <- ggplot(aDataFrame, aes(X, Y)) +
+      xlab(xTitle) +
+      ylab(yTitle) +
+      ggtitle(mainTitle) +
+      theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+      geom_point(colour = "blue") +
+      scale_x_log10() +
+      scale_y_log10();
+    
+    return(aPlot);
+  }
+}
+
+#' Title  TwoColumnDataFrameToXYLogLmPlot
+#'
+#' @param aDataFrame 
+#' @param columnX 
+#' @param columnY 
+#' @param mainTitle 
+#'
+#' @return ggplot2
+#' @export TBD
+#'
+#' @examples TBD
+TwoColumnDataFrameToXYLogLmPlot <- function(aDataFrame = NULL
+                                          , columnX = -1
+                                          , columnY = -1
+                                          , mainTitle = ""){
+  
+  if (is.null(aDataFrame)) {
+    
+    return(NULL);
+  } else {
+    # titles
+    xTitle <- names(aDataFrame)[columnX];
+    yTitle <- names(aDataFrame)[columnY];
+    colnames(aDataFrame) <- NULL;
+    names(aDataFrame)[columnX] <- "X";
+    names(aDataFrame)[columnY] <- "Y";
+    # graph
+    aPlot <- ggplot(aDataFrame, aes(X, Y)) +
+      xlab(xTitle) +
+      ylab(yTitle) +
+      ggtitle(mainTitle) +
+      theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+      geom_point(colour = "blue") +
+      geom_smooth(method = "lm", colour = "red", size = 2) +
+      scale_x_log10() +
+      scale_y_log10();
+    
+    return(aPlot);
+  }
+}
 
 #' Title  DescribePlotList()
 #'
