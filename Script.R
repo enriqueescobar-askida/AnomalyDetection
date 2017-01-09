@@ -31,5 +31,7 @@ rm(localRepository);
 options(scipen = 100);
 # session info
 sessionInfo();
+# attached
+search();
 # load project
 source(paste0(projectName, ".R"));
