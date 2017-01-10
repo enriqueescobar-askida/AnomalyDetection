@@ -55,13 +55,12 @@ str(model);
 model$coefficients;
 # Now fit a new model including more columns
 # Model log of price against all columns
-model <- TwoColumnDataFramePlusToLinearModel(diamondSample, 1, 7);
+model <- stats::lm(log(price) ~ log(carat) + ., data = diamonds);
 summary(model);
 # R-squared = 0.9824, i.e. model explains 98.2% of variance, i.e. a better model than previously
 # Create data frame of actual and predicted price
-diamondsActualVsPredicted <- data.frame(actual = diamonds$price
-                               # anti-log of predictions
-                               , predicted = exp(stats::predict(model, diamonds)));
+# anti-log of predictions
+diamondsActualVsPredicted <- data.frame(actual = diamonds$price, predicted = exp(stats::predict(model, diamonds)));
 # Inspect predictions
 head(diamondsActualVsPredicted);
 # Create plot of actuals vs predictions

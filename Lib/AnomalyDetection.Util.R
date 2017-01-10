@@ -11,6 +11,11 @@ library(reshape2);
 #
 #
 #
+# import stats.Util.R
+myLibrary <- "Lib/stats.Util.R";
+write(paste0(c("Load Util........\t", myLibrary), sep = "", collapse = ""), stdout());
+source(myLibrary);
+rm(myLibrary);
 # import tibble.Util.R
 myLibrary <- "Lib/tibble.Util.R";
 write(paste0(c("Load Util........\t", myLibrary), sep = "", collapse = ""), stdout());
