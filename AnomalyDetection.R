@@ -64,6 +64,7 @@ diamondsActualVsPredicted <- data.frame(actual = diamonds$price, predicted = exp
 # Inspect predictions
 head(diamondsActualVsPredicted);
 # Create plot of actuals vs predictions
+#ColumnAgainstColumnDataFrameToPlot(diamondsActualVsPredicted, "diamonds data");
 ggplot2::ggplot(diamondsActualVsPredicted, aes(x = actual, y = predicted)) + 
   geom_point(colour = "blue", alpha = 0.01) +
   geom_smooth(colour = "red") +

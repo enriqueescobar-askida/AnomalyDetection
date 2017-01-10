@@ -6,6 +6,39 @@ require(ggplot2);
 # Set the font size so that it will be clearly legible.
 ggplot2::theme_set(theme_gray(base_size = 18));
 
+ColumnAgainstColumnDataFrameToPlot <- function(aDataFrame = NULL,
+                                               mainTitle = ""){
+  
+  if (is.null(aDataFrame) || ncol(aDataFrame) != 2) {
+    
+    return(NULL);
+  } else {
+    # titles
+    xTitle <- names(aDataFrame)[1];
+    yTitle <- names(aDataFrame)[2];
+    colnames(aDataFrame) <- NULL;
+    names(aDataFrame)[1] <- "X";
+    names(aDataFrame)[2] <- "Y";
+    # numbers
+    maxX <- max(aDataFrame[1]);
+    maxY <- max(aDataFrame[2]);
+    mini <- min(maxY, maxY);
+    deci <- round(log10(mini));
+    maxi <- round(mini/10^deci)*10^deci;
+    # graph
+    aPlot <- ggplot(aDataFrame, aes(X, Y)) +
+      xlab(xTitle) +
+      ylab(yTitle) +
+      theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+      geom_point(colour = "blue", alpha = 0.01) +
+      geom_smooth(colour = "red") +
+      coord_equal(ylim = c(0, maxi)) + # force equal scale
+      ggtitle(mainTitle) ;
+    
+    return(aPlot);
+  }
+}
+
 #' Title  TwoColumnDataFrameToPlot
 #'
 #' @param aDataFrame 
