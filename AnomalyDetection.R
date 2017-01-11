@@ -64,24 +64,12 @@ diamondsActualVsPredicted <- data.frame(actual = diamonds$price, predicted = exp
 # Inspect predictions
 head(diamondsActualVsPredicted);
 # Create plot of actuals vs predictions
-#ColumnAgainstColumnDataFrameToPlot(diamondsActualVsPredicted, "diamonds data");
-ggplot2::ggplot(diamondsActualVsPredicted, aes(x = actual, y = predicted)) + 
-  geom_point(colour = "blue", alpha = 0.01) +
-  geom_smooth(colour = "red") +
-  coord_equal(ylim = c(0, 20000)) + # force equal scale
-  ggtitle("Linear model of diamonds data");
+ColumnVersusColumnDataFrameToPlot(diamondsActualVsPredicted, "Diamonds Actual vs. Pedicted");
 ## Introduction to the ggplot2 plotting package
 # The ggplot2 package is tremendously popular because it allows you to create
 # beautiful plots by describing the plot structure.
 # Install and load the packages.
 #options(warn = -1)
-suppressWarnings(
-  if (!require("ggplot2", quietly = TRUE))
-    install.packages("ggplot2", quiet = TRUE))
-# mapproj is required for map projections.
-suppressWarnings(
-  if (!require("mapproj", quietly = TRUE))
-    install.packages("mapproj", quiet = TRUE))
 #options(warn = 0)
 library("ggplot2", quietly = TRUE)
 library("mapproj", quietly = TRUE)
