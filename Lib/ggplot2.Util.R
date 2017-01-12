@@ -6,6 +6,34 @@ require(ggplot2);
 # Set the font size so that it will be clearly legible.
 ggplot2::theme_set(theme_gray(base_size = 18));
 
+PlotQuakes <- function(quakeDF, anAlpha = 0.25, mainTitle = "Earthquakes near Fiji",
+                       useHeat = FALSE, useMagnitude = FALSE){
+  aPlot <- ggplot2::ggplot(quakeDF, aes(x = long, y = lat));
+  
+  if (useMagnitude == TRUE) {
+    aPlot <- aPlot + geom_point(aes(colour = depth, size = mag), alpha = anAlpha);
+  }
+  
+  aPlot <- aPlot + geom_point(aes(colour = depth), alpha = anAlpha) +
+    ggtitle(mainTitle) +
+    coord_map();
+  
+  if (useHeat == TRUE){
+    aPlot <- aPlot + scale_colour_gradient(low = "blue", high = "red");
+  }
+  
+  return(aPlot);
+}
+
+#' Title  ColumnVersusColumnDataFrameToPlot
+#'
+#' @param aDataFrame 
+#' @param mainTitle 
+#'
+#' @return ggplot2
+#' @export TBD
+#'
+#' @examples TBD
 ColumnVersusColumnDataFrameToPlot <- function(aDataFrame = NULL,
                                                mainTitle = ""){
   
